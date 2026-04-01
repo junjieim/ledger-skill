@@ -1,5 +1,7 @@
 bin/
 dist/
+skill-template/scripts/ledger
+skill-template/data/*.db*
 *.exe
 *.test
 coverage.out

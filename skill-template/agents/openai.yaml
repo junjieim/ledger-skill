@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ledger Skill"
+  short_description: "Use the local CLI to manage ledger entries"
+  default_prompt: "Use $ledger-skill to record, search, update, or delete local ledger entries with the bundled CLI."
