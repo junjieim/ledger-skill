@@ -111,7 +111,7 @@ ledger-skill/
 
 - `datetime`：必填，输入必须是 RFC3339，存储时统一转成 UTC
 - `amount`：必填，使用十进制字符串，如 `10`、`10.50`、`-5.25`
-- `currency`：必填，精确匹配字段
+- `currency`：必填，仅支持 `RMB`、`HKD`、`USD`、`EUR`、`JPY`、`GBP`、`AUD`、`CAD`、`SGD`、`TWD`
 - `category`：必填，精确匹配字段
 - `note`：存储层视为必填；如果输入为空，会自动写成 `none`
 
@@ -132,11 +132,11 @@ ledger-skill/
 CLI 用法：
 
 ```bash
-ledger add --datetime <RFC3339> --amount <decimal> --currency <text> --category <text> [--note <text>]
-ledger list [--currency <text>] [--category <text>] [--from <RFC3339>] [--to <RFC3339>] [--limit <n>]
+ledger add --datetime <RFC3339> --amount <decimal> --currency <currency_code> --category <text> [--note <text>]
+ledger list [--currency <currency_code>] [--category <text>] [--from <RFC3339>] [--to <RFC3339>] [--limit <n>]
 ledger search --query <text> [--limit <n>]
 ledger get <id>
-ledger update <id> [--datetime <RFC3339>] [--amount <decimal>] [--currency <text>] [--category <text>] [--note <text>]
+ledger update <id> [--datetime <RFC3339>] [--amount <decimal>] [--currency <currency_code>] [--category <text>] [--note <text>]
 ledger delete <id>
 ledger help [command]
 ```
@@ -144,6 +144,7 @@ ledger help [command]
 行为约束：
 
 - `list` 使用精确字段过滤，不做模糊搜索。
+- `currency` 仅允许上述 10 个预设值；未显式指定时，建议 Agent 默认使用 `RMB`。
 - `search` 仅对 `note` 做不区分大小写匹配。
 - `list` 和 `search` 都按 `datetime DESC, created_at DESC` 排序。
 - `limit=0` 表示不限制结果数量。

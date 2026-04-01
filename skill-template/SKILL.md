@@ -25,6 +25,8 @@ Expect all data commands to print JSON on stdout. Treat `help` as the only text-
 - Prefer `scripts/ledger.sh` over calling the binary path directly.
 - Use `bash scripts/ledger.sh ...` when the executable bit is not preserved in the local checkout.
 - Provide `datetime` as RFC3339 and `amount` as a plain decimal string.
+- Restrict `currency` to this fixed set: `RMB`, `HKD`, `USD`, `EUR`, `JPY`, `GBP`, `AUD`, `CAD`, `SGD`, `TWD`.
+- If the user does not provide a currency, default to `RMB`.
 - Normalize an empty or missing note to `none`.
 - Use `list` or `search` first when the user refers to an entry indirectly and you still need its `id`.
 - Use `list` for deterministic field filters and `search` for note-oriented discovery. Do not substitute one for the other.

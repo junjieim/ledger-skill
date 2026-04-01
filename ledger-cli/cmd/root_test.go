@@ -359,6 +359,11 @@ func TestRunnerCommandValidationErrors(t *testing.T) {
 			wantMsg: "amount is required",
 		},
 		{
+			name:    "add unsupported currency",
+			args:    []string{"add", "--datetime", "2026-04-01T00:00:00Z", "--amount", "12.50", "--currency", "CNY", "--category", "food"},
+			wantMsg: "currency must be one of: RMB, HKD, USD, EUR, JPY, GBP, AUD, CAD, SGD, TWD",
+		},
+		{
 			name:    "list positional argument",
 			args:    []string{"list", "extra"},
 			wantMsg: "list does not accept positional arguments",
