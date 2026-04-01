@@ -197,16 +197,17 @@ ledger help [command]
 make build
 ```
 
+当前 `make build` 会在 `ledger-cli/` 目录下生成 `ledger` 二进制（即 `ledger-cli/ledger`）。
+
 如果你想绕过 `Makefile` 直接执行底层 Go 命令，等价方式是：
 
-```powershell
-cd ledger-cli
-go build -o ..\skill-template\scripts\ledger.exe .
+```bash
+go -C ledger-cli build -o ledger .
 ```
 
 说明：
 
-- 当二进制位于 `skill-template/scripts/ledger` 时，默认数据库路径会解析为 `skill-template/data/ledger.db`
+- 直接运行 `ledger-cli/ledger` 时，默认数据库路径会按二进制所在目录解析
 - `OpenSQLiteStore` 会自动创建缺失的 `data/` 目录和表结构
 
 ### 2. 查看帮助
@@ -267,12 +268,12 @@ make test
 make vet
 ```
 
-这几个目标对应的底层动作应当分别覆盖：
+这几个目标对应的底层动作为：
 
-- 构建 `ledger` 二进制并放到 skill 可消费的位置
-- 格式化变更过的 Go 文件，并执行 `go fmt ./...`
-- 运行 `go test ./...`
-- 运行 `go vet ./...`
+- `make build`：执行 `go -C ledger-cli build -o ledger .`
+- `make fmt`：执行 `go -C ledger-cli fmt ./...`
+- `make test`：执行 `go -C ledger-cli test ./...`
+- `make vet`：执行 `go -C ledger-cli vet ./...`
 
 ## 开发与验证
 
