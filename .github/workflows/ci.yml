@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: ledger-cli/go.mod
+
+      - name: Run format check
+        run: |
+          make fmt
+          git diff --exit-code
+
+      - name: Run tests
+        run: make test
+
+      - name: Run vet
+        run: make vet
+
+      - name: Build
+        run: make build
