@@ -10,6 +10,19 @@ import (
 
 var amountPattern = regexp.MustCompile(`^-?\d+(\.\d+)?$`)
 
+var allowedCurrencies = map[string]struct{}{
+	"RMB": {},
+	"HKD": {},
+	"USD": {},
+	"EUR": {},
+	"JPY": {},
+	"GBP": {},
+	"AUD": {},
+	"CAD": {},
+	"SGD": {},
+	"TWD": {},
+}
+
 type Entry struct {
 	ID        string `json:"id"`
 	Datetime  string `json:"datetime"`
@@ -61,7 +74,7 @@ func ValidateCreateInput(input CreateInput) (CreateInput, error) {
 		return CreateInput{}, err
 	}
 
-	currency, err := normalizeRequiredText("currency", input.Currency)
+	currency, err := normalizeCurrency(input.Currency)
 	if err != nil {
 		return CreateInput{}, err
 	}
@@ -132,6 +145,14 @@ func NormalizeListFilter(filter ListFilter) (ListFilter, error) {
 		Currency: strings.TrimSpace(filter.Currency),
 		Category: strings.TrimSpace(filter.Category),
 		Limit:    filter.Limit,
+	}
+
+	if normalized.Currency != "" {
+		currency, err := normalizeCurrency(normalized.Currency)
+		if err != nil {
+			return ListFilter{}, err
+		}
+		normalized.Currency = currency
 	}
 
 	if filter.From != "" {
@@ -221,6 +242,19 @@ func normalizeRequiredText(field string, value string) (string, error) {
 	trimmed := strings.TrimSpace(value)
 	if trimmed == "" {
 		return "", NewInvalidArgumentError(field + " is required")
+	}
+
+	return trimmed, nil
+}
+
+func normalizeCurrency(value string) (string, error) {
+	trimmed := strings.ToUpper(strings.TrimSpace(value))
+	if trimmed == "" {
+		return "", NewInvalidArgumentError("currency is required")
+	}
+
+	if _, ok := allowedCurrencies[trimmed]; !ok {
+		return "", NewInvalidArgumentError("currency must be one of: RMB, HKD, USD, EUR, JPY, GBP, AUD, CAD, SGD, TWD")
 	}
 
 	return trimmed, nil

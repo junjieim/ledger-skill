@@ -66,15 +66,16 @@ Use "ledger help <command>" for command-specific usage.
 
 func addHelpText() string {
 	return `Usage:
-  ledger add --datetime <RFC3339> --amount <decimal> --currency <text> --category <text> [--note <text>]
+  ledger add --datetime <RFC3339> --amount <decimal> --currency <currency_code> --category <text> [--note <text>]
 
+Supported currency values: RMB, HKD, USD, EUR, JPY, GBP, AUD, CAD, SGD, TWD.
 Adds a new ledger entry and prints the created entry as JSON.
 `
 }
 
 func listHelpText() string {
 	return `Usage:
-  ledger list [--currency <text>] [--category <text>] [--from <RFC3339>] [--to <RFC3339>] [--limit <n>]
+  ledger list [--currency <currency_code>] [--category <text>] [--from <RFC3339>] [--to <RFC3339>] [--limit <n>]
 
 Lists entries using exact field filters and prints the result as JSON.
 `
@@ -98,7 +99,7 @@ Fetches a single entry by id and prints it as JSON.
 
 func updateHelpText() string {
 	return `Usage:
-  ledger update <id> [--datetime <RFC3339>] [--amount <decimal>] [--currency <text>] [--category <text>] [--note <text>]
+  ledger update <id> [--datetime <RFC3339>] [--amount <decimal>] [--currency <currency_code>] [--category <text>] [--note <text>]
 
 Updates one or more fields on an existing entry and prints the updated entry as JSON.
 `

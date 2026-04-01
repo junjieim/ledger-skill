@@ -18,7 +18,9 @@ Stored entries always contain these fields:
 - Use RFC3339 for all timestamps, for example `2026-04-01T08:00:00+08:00`.
 - Use a plain decimal string for `amount`, for example `10`, `10.50`, or `-5.25`.
 - Do not use commas or currency symbols inside `amount`.
-- Treat `currency` and `category` as required exact-match text fields.
+- Treat `currency` as a required exact-match field with allowed values: `RMB`, `HKD`, `USD`, `EUR`, `JPY`, `GBP`, `AUD`, `CAD`, `SGD`, `TWD`.
+- Treat `category` as a required exact-match text field.
+- If the user does not specify a currency in planning, default to `RMB`.
 - Treat `note` as required at the stored-record level. Pass `none` when no real note exists.
 - For `update`, provide the entry `id` plus at least one field to patch.
 
@@ -27,11 +29,11 @@ Stored entries always contain these fields:
 Use these commands through `scripts/ledger.sh`:
 
 ```bash
-scripts/ledger.sh add --datetime <RFC3339> --amount <decimal> --currency <text> --category <text> [--note <text>]
-scripts/ledger.sh list [--currency <text>] [--category <text>] [--from <RFC3339>] [--to <RFC3339>] [--limit <n>]
+scripts/ledger.sh add --datetime <RFC3339> --amount <decimal> --currency <currency_code> --category <text> [--note <text>]
+scripts/ledger.sh list [--currency <currency_code>] [--category <text>] [--from <RFC3339>] [--to <RFC3339>] [--limit <n>]
 scripts/ledger.sh search --query <text> [--limit <n>]
 scripts/ledger.sh get <id>
-scripts/ledger.sh update <id> [--datetime <RFC3339>] [--amount <decimal>] [--currency <text>] [--category <text>] [--note <text>]
+scripts/ledger.sh update <id> [--datetime <RFC3339>] [--amount <decimal>] [--currency <currency_code>] [--category <text>] [--note <text>]
 scripts/ledger.sh delete <id>
 scripts/ledger.sh help [command]
 ```

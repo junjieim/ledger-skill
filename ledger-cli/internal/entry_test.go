@@ -17,7 +17,7 @@ func TestValidateCreateInput(t *testing.T) {
 			input: CreateInput{
 				Datetime: "2026-04-01T08:00:00+08:00",
 				Amount:   "12.50",
-				Currency: "HKD",
+				Currency: "hkd",
 				Category: "food",
 				Note:     "   ",
 			},
@@ -46,6 +46,17 @@ func TestValidateCreateInput(t *testing.T) {
 			},
 			wantError: "currency is required",
 		},
+		{
+			name: "rejects unsupported currency",
+			input: CreateInput{
+				Datetime: "2026-04-01T08:00:00+08:00",
+				Amount:   "12.50",
+				Currency: "CNY",
+				Category: "food",
+				Note:     "breakfast",
+			},
+			wantError: "currency must be one of: RMB, HKD, USD, EUR, JPY, GBP, AUD, CAD, SGD, TWD",
+		},
 	}
 
 	for _, test := range tests {
@@ -72,6 +83,9 @@ func TestValidateCreateInput(t *testing.T) {
 			}
 			if got.Datetime != test.wantTime {
 				t.Fatalf("ValidateCreateInput() datetime = %q, want %q", got.Datetime, test.wantTime)
+			}
+			if got.Currency != "HKD" {
+				t.Fatalf("ValidateCreateInput() currency = %q, want %q", got.Currency, "HKD")
 			}
 		})
 	}
@@ -137,6 +151,14 @@ func TestNormalizeListFilter(t *testing.T) {
 		t.Fatal("NormalizeListFilter() error = nil, want validation error")
 	}
 	if err.Error() != "from must be earlier than or equal to to" {
+		t.Fatalf("NormalizeListFilter() error = %q", err.Error())
+	}
+
+	_, err = NormalizeListFilter(ListFilter{Currency: "cny"})
+	if err == nil {
+		t.Fatal("NormalizeListFilter() error = nil, want validation error")
+	}
+	if err.Error() != "currency must be one of: RMB, HKD, USD, EUR, JPY, GBP, AUD, CAD, SGD, TWD" {
 		t.Fatalf("NormalizeListFilter() error = %q", err.Error())
 	}
 }
